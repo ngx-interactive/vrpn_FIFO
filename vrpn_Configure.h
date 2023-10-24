@@ -379,6 +379,9 @@
 // JSON Network (UDP) mesages are used by the vrpn widgets for Android,
 //#define VRPN_USE_JSONNET
 
+// Instructs VRPN to compile code to handle messages from STDIN
+#define VRPN_USE_FIFO
+
 //------------------------
 // Instructs VRPN to compile code to use the Arrington Research
 // ViewPoint EyeTracker.  You will also need to set VRPN_VIEWPOINT_H

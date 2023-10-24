@@ -86,6 +86,7 @@
 #include "vrpn_Tracker_isense.h"
 #include "vrpn_Tracker_Isotrak.h" // for vrpn_Tracker_Isotrak
 #include "vrpn_Tracker_JsonNet.h"
+#include "vrpn_Tracker_FIFO.h"
 #include "vrpn_Tracker_Liberty.h"   // for vrpn_Tracker_Liberty
 #include "vrpn_Tracker_LibertyHS.h" // for vrpn_Tracker_LibertyHS
 #include "vrpn_Tracker_MotionNode.h"
@@ -2829,6 +2830,44 @@ int vrpn_Generic_Server_Object::setup_Tracker_JsonNet(char *&pch, char *line,
                     "VRPN_USE_JSONNET not defined in vrpn_Configure.h!\n");
     return -1;
 #endif // VRPN_USE_JsonNet
+}
+
+int vrpn_Generic_Server_Object::setup_Tracker_STDIN(char *&pch, char *line,
+                                                      FILE * /*config_file*/)
+{
+    /*
+     * Parses the section of the configuration file related to the device
+      #DeviceClass DeviceName Id
+      Tracker_STDIN Person0 0
+      Tracker_STDIN Person1 1
+     *
+     * Create the device object
+     */
+    char name[LINESIZE];
+    int id;
+
+    VRPN_CONFIG_NEXT();
+    // Get the arguments (class, device_name, port)
+    if (sscanf(pch, "%511s%d", name, &id) != 2) {
+        fprintf(stderr, "Bad vrpn_Tracker_FIFO line: %s\n", line);
+        return -1;
+    }
+
+//#ifdef VRPN_USE_FIFO
+    // Open vrpn_Tracker_FIFO:
+
+    if (verbose) {
+        printf("Opening vrpn_Tracker_FIFO: %s id %d\n", name, id);
+    }
+
+    _devices->add(new vrpn_Tracker_FIFO(name, connection, id));
+
+    return 0;
+//#else
+    //fprintf(stderr, "vrpn_server: Can't open vrpn_Tracker_FIFO: "
+                    //"VRPN_USE_FIFO not defined in vrpn_Configure.h!\n");
+    //return -1;
+//#endif // VRPN_USE_FIFO
 }
 
 int vrpn_Generic_Server_Object::setup_DTrack(char *&pch, char *line,
@@ -5788,6 +5827,9 @@ vrpn_Generic_Server_Object::vrpn_Generic_Server_Object(
                 }
                 else if (VRPN_ISIT("vrpn_Tracker_JsonNet")) {
                     VRPN_CHECK(setup_Tracker_JsonNet);
+                }
+                else if (VRPN_ISIT("vrpn_Tracker_FIFO")) {
+                    VRPN_CHECK(setup_Tracker_STDIN);
                 }
                 else if (VRPN_ISIT("vrpn_YEI_3Space_Sensor")) {
                     VRPN_CHECK(setup_YEI_3Space_Sensor);

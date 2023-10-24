@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.12.1)
 project(VRPN)
 
+set (CMAKE_CXX_STANDARD 11)
+
 #-----------------------------------------------------------------------------
 # XXX Things to make better.
 #
@@ -1139,6 +1141,7 @@ set(VRPN_SERVER_SOURCES
 	vrpn_Tracker_isense.C
 	vrpn_Tracker_Isotrak.C
 	vrpn_Tracker_JsonNet.C
+	vrpn_Tracker_FIFO.C
 	vrpn_Tracker_Liberty.C
 	vrpn_Tracker_MotionNode.C
 	vrpn_Tracker_NDI_Polaris.C
