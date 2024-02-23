@@ -25,7 +25,7 @@ public:
 
 private:
 	bool _parse_tracker_data();
-  void report_changes(float pos[], int id);
+  void report_changes(double pos[], int id);
 
 };
 
